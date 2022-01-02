@@ -9,9 +9,10 @@ public class User {
     private String username;
     private String password;
     private String birthday;
+    private int filterId;
     private boolean premium;
 
-    public User(int id, String name, String surname, String email, String username, String password, String birthday, boolean premium) {
+    public User(int id, String name, String surname, String email, String username, String password, String birthday, int filterId, boolean premium) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -19,6 +20,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.birthday = birthday;
+        this.filterId = filterId;
         this.premium = premium;
     }
 
@@ -84,5 +86,13 @@ public class User {
 
     public void setPremium(boolean premium) {
         this.premium = premium;
+    }
+
+    public int getFilterId() {
+        return filterId;
+    }
+
+    public void setFilterId(int filterId) {
+        this.filterId = filterId;
     }
 }

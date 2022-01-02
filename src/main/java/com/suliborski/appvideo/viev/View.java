@@ -1,7 +1,11 @@
 package com.suliborski.appvideo.viev;
 
-import com.toedter.calendar.JCalendar;
+import tds.video.VideoWeb;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.*;
 
 public class View extends JFrame {
@@ -36,17 +40,21 @@ public class View extends JFrame {
     private JButton registerPanelRegisterButton;
 
     private JPanel explorePanel;
-    private JButton button4;
+    private JTextField explorePanelSearchField;
+    private JButton explorePanelSearchButton;
+    private JButton explorePanelClearButton;
+    private JPanel explorePanelVideosResultPanel;
+    private JList explorePanelVideosResultList;
+
+
+
     private JList explorePanelAllTagsList;
     private JList explorePanelChosenTagsList;
-    private JButton explorePanelSearchButton;
 
     private JPanel recentPanel;
     private JPanel myPlaylistsPanel;
     private JPanel newPlaylistPanel;
     private JLabel logoLabel;
-    private JTextField explorePanelSearchField;
-    private JButton explorePanelClearButton;
 
 
     public View() {
@@ -55,14 +63,13 @@ public class View extends JFrame {
         setSize(800, 600);
         setContentPane(rootPanel);
         setVisible(true);
-
-        JCalendar calendar;
-
-        calendar = new JCalendar();
-
-
-        //panel.add(calendar);
-
+////
+//        VideoWeb videoWeb = new VideoWeb();
+////        JCalendar calendar = new JCalendar();
+////        explorePanelVideosResultPanel.add(videoWeb);
+//////        videoWeb.playVideo("https://www.youtube.com/watch?v=xbev7gEdnNA");
+////        //jcalendar
+////        //video playback
     }
 
     public void displayErrorMessage(String message) {
@@ -71,6 +78,19 @@ public class View extends JFrame {
 
     public void displayInformationMessage(String message) {
         JOptionPane.showMessageDialog(this, message, "Information", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void playVideo(int videoId) {
+//        EventQueue.invokeLater(() -> {
+//            try {
+//                videoWeb = new VideoWeb();
+//                PruebaVideoUI frame = new PruebaVideoUI();
+//                frame.setVisible(true);
+//                videoWeb.playVideo("https://www.youtube.com/watch?v=1VDaOPzQ1sk ");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        });
     }
 
     public JPanel getRootPanel() {
@@ -129,6 +149,30 @@ public class View extends JFrame {
         return loginPanelPasswordField;
     }
 
+    public JTextField getExplorePanelSearchField() {
+        return explorePanelSearchField;
+    }
+
+    public JButton getExplorePanelSearchButton() {
+        return explorePanelSearchButton;
+    }
+
+    public JButton getExplorePanelClearButton() {
+        return explorePanelClearButton;
+    }
+
+    public JList getExplorePanelAllTagsList() {
+        return explorePanelAllTagsList;
+    }
+
+    public JList getExplorePanelChosenTagsList() {
+        return explorePanelChosenTagsList;
+    }
+
+    public JLabel getLogoLabel() {
+        return logoLabel;
+    }
+
     public JButton getLoginPanelLoginButton() {
         return loginPanelLoginButton;
     }
@@ -169,10 +213,6 @@ public class View extends JFrame {
         return explorePanel;
     }
 
-    public JButton getButton4() {
-        return button4;
-    }
-
     public JList getList1() {
         return explorePanelAllTagsList;
     }
@@ -203,5 +243,13 @@ public class View extends JFrame {
 
     public JLabel getGreetingLabel() {
         return greetingLabel;
+    }
+
+    public JPanel getExplorePanelVideosResultPanel() {
+        return explorePanelVideosResultPanel;
+    }
+
+    public JList getExplorePanelVideosResultList() {
+        return explorePanelVideosResultList;
     }
 }

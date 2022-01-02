@@ -11,7 +11,9 @@ public class NavigationController {
     public NavigationController(View view) {
         NavigationController.view = view;
 
-        showPanel(view.getLoginPanel());
+        // @@@
+//        showPanel(view.getLoginPanel());
+        showPanel(view.getExplorePanel());
 
         NavigationController.view.getRegisterAuthButton().addActionListener(e -> {showPanel(view.getRegisterPanel());});
         NavigationController.view.getLoginAuthButton().addActionListener(e -> {showPanel(view.getLoginPanel());});

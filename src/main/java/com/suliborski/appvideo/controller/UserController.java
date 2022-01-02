@@ -1,18 +1,23 @@
 package com.suliborski.appvideo.controller;
 
-import com.suliborski.appvideo.model.UserModel;
 import com.suliborski.appvideo.model.dao.UserDAO;
+import com.suliborski.appvideo.model.models.Filter;
 import com.suliborski.appvideo.model.models.User;
 import com.suliborski.appvideo.viev.View;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserController {
 
     public static User loggedUser = null;
 
-    private View view;
-    private UserModel userModel;
+    private final View view;
+    private final UserDAO userModel;
 
-    public UserController(View view, UserModel userModel) {
+    private List<Filter> activeFilters = new ArrayList<>();
+
+    public UserController(View view, UserDAO userModel) {
         this.view = view;
         this.userModel = userModel;
 
@@ -21,6 +26,10 @@ public class UserController {
         this.view.getLogoutAuthButton().addActionListener(e -> onLogout());
         this.view.getPremiumAuthButton().addActionListener(e -> onPremium());
 
+        // @@@
+        loggedUser = userModel.verifyLogin("user", "user");
+        updateGreetingLabel();
+        updatePremiumButton();
     }
 
     private void onLogin() {
@@ -55,10 +64,10 @@ public class UserController {
         if (!view.getRegisterPanelPasswordField().getText().equals(view.getRegisterPanelRepeatPasswordField().getText())) {
             view.displayErrorMessage("Passwords do not match!"); return; }
 
-        if (UserDAO.getUserByUsername(view.getRegisterPanelUsernameField().getText()) != null) {
+        if (userModel.getUserByUsername(view.getRegisterPanelUsernameField().getText()) != null) {
             view.displayErrorMessage("Username already exists!"); return; }
 
-        loggedUser = UserDAO.registerUser(view.getRegisterPanelNameField().getText(), view.getRegisterPanelSurnameField().getText(),
+        loggedUser = userModel.registerUser(view.getRegisterPanelNameField().getText(), view.getRegisterPanelSurnameField().getText(),
                 view.getRegisterPanelEmailField().getText(), view.getRegisterPanelUsernameField().getText(),
                 view.getRegisterPanelPasswordField().getText(), view.getRegisterPanelBirthdayField().getText());
         view.displayInformationMessage("You've been registered successfully and automatically logged in!");
@@ -75,14 +84,15 @@ public class UserController {
 
     private void onPremium() {
         if (loggedUser != null) {
-            UserDAO.setUserPremium(loggedUser.getId(), !loggedUser.isPremium());
+            userModel.setUserPremium(loggedUser.getId(), !loggedUser.isPremium());
             updateLoggedUser();
             updatePremiumButton();
         }
+        //remove filters
     }
 
     private void updateLoggedUser() {
-        loggedUser = UserDAO.getUserById(loggedUser.getId());
+        loggedUser = userModel.getUserById(loggedUser.getId());
     }
 
     private void updatePremiumButton() {

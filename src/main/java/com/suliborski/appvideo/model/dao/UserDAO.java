@@ -6,31 +6,23 @@ import com.suliborski.appvideo.model.models.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserDAO {
-    public static User verifyLogin(String username, String password){
+    public User verifyLogin(String username, String password){
         try {
             PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
                     "select * from users where username=? and password=?");
             ps.setString(1, username);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return new User(rs.getInt("id"), rs.getString("name"), rs.getString("surname"),
-                        rs.getString("email"), rs.getString("username"), rs.getString("password"),
-                        rs.getString("birthday"), rs.getBoolean("premium"));
-            } else {
-                return null;
-            }
+            return handleUserResult(rs);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             return null;
         }
     }
 
-    public static User registerUser(String name, String surname, String email, String username, String password, String birthday) {
+    public User registerUser(String name, String surname, String email, String username, String password, String birthday) {
         try {
             PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
                     "INSERT INTO users SET name=?, surname=?, email=?, username=?, password=?, birthday=?, premium=false");
@@ -49,7 +41,7 @@ public class UserDAO {
         }
     }
 
-    public static User getUserById(int userId){
+    public User getUserById(int userId){
         try {
             PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
                     "select * from users where id=?");
@@ -62,7 +54,7 @@ public class UserDAO {
         }
     }
 
-    public static User getUserByUsername(String username){
+    public User getUserByUsername(String username){
         try {
             PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
                     "select * from users where username=?");
@@ -75,7 +67,7 @@ public class UserDAO {
         }
     }
 
-    public static boolean setUserPremium(int userId, boolean premium) {
+    public boolean setUserPremium(int userId, boolean premium) {
         try {
             PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
                     "UPDATE users SET premium=? WHERE id=?");
@@ -91,11 +83,11 @@ public class UserDAO {
     }
 
 
-    private static User handleUserResult(ResultSet resultSet) throws SQLException {
+    private User handleUserResult(ResultSet resultSet) throws SQLException {
         if (resultSet.next()) {
             return new User(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("surname"),
                     resultSet.getString("email"), resultSet.getString("username"), resultSet.getString("password"),
-                    resultSet.getString("birthday"), resultSet.getBoolean("premium"));
+                    resultSet.getString("birthday"), resultSet.getInt("filterId"), resultSet.getBoolean("premium"));
         } else {
             return null;
         }
