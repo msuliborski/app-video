@@ -103,5 +103,16 @@ public class PlaylistDAO {
             return false;
         }
     }
-
+    public boolean deletePlaylist(int playlistId) {
+        try {
+            PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
+                    "DELETE FROM playlists WHERE id=?");
+            ps.setInt(1, playlistId);
+            ps.executeUpdate();
+            return true;
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return false;
+        }
+    }
 }

@@ -41,6 +41,20 @@ public class UserDAO {
         }
     }
 
+    public boolean deleteUser(int userId) {
+        try {
+            PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
+                    "DELETE FROM users WHERE id=?");
+            ps.setInt(1, userId);
+            ps.executeUpdate();
+
+            return true;
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return false;
+        }
+    }
+
     public User getUserById(int userId){
         try {
             PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(

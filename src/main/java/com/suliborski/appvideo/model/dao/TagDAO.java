@@ -24,6 +24,19 @@ public class TagDAO {
         }
     }
 
+    public Tag getTagById(int id) {
+        try {
+            PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
+                    "select * from tags where id=?");
+            ps.setInt(1, id);
+            ResultSet resultSet = ps.executeQuery();
+            return handleTagsResult(resultSet).get(0);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+        return null;
+    }
+
     public List<Tag> getVideoTags(int videoId) {
         try {
             PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
@@ -92,7 +105,7 @@ public class TagDAO {
         }
     }
 
-    public static boolean addTag(String name) {
+    public boolean addTag(String name) {
         try {
             PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
                     "INSERT INTO tags (name) VALUES (?)");
@@ -105,7 +118,7 @@ public class TagDAO {
         }
     }
 
-    public static boolean removeTag(int tagId) {
+    public boolean removeTag(int tagId) {
         try {
             PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
                     "DELETE FROM tags WHERE id=?");

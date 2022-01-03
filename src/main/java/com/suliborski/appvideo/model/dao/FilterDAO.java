@@ -62,6 +62,35 @@ public class FilterDAO {
         }
     }
 
+    public boolean addFilter(String name, int tagToRemoveId, int minViews, int maxTitleLength) {
+        try {
+            PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
+                    "INSERT INTO filters (name, tagToRemoveId, minViews, maxTitleLength) VALUES (?, ?, ?, ?)");
+            ps.setString(1, name);
+            ps.setInt(2, tagToRemoveId);
+            ps.setInt(3, minViews);
+            ps.setInt(4, maxTitleLength);
+            ps.executeUpdate();
+            return true;
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return false;
+        }
+    }
+
+    public boolean deleteFilter(int id) {
+        try {
+            PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
+                    "DELETE FROM filters WHERE id=?");
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            return true;
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return false;
+        }
+    }
+
     private List<Filter> handleFiltersResult(ResultSet resultSet) throws SQLException {
         List<Filter> filters = new ArrayList<>();
         while(resultSet.next()) {

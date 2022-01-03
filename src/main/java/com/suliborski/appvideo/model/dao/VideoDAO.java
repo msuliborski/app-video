@@ -69,6 +69,19 @@ public class VideoDAO {
         }
     }
 
+    public Video getVideoByUrl(String url) {
+        try {
+            PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
+                    "select * from videos where url = ?");
+            ps.setString(1, url);
+            ResultSet resultSet = ps.executeQuery();
+            return handleVideosResult(resultSet).get(0);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return null;
+        }
+    }
+
     public List<Video> getRecentVideos(int userId, Filter filter) {
         try {
             PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
@@ -160,5 +173,17 @@ public class VideoDAO {
             return false;
         }
     }
+    public boolean deleteVideo(int videoId) {
+        try {
+            PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
+                    "DELETE FROM videos WHERE id = ?");
+            ps.setInt(1, videoId);
+            ps.execute();
 
+            return true;
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return false;
+        }
+    }
 }
