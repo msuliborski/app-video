@@ -57,4 +57,9 @@ public class Filter {
     public void setMaxTitleLength(int maxTitleLength) {
         this.maxTitleLength = maxTitleLength;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

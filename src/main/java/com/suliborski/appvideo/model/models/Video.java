@@ -6,14 +6,12 @@ public class Video {
     private String title;
     private String url;
     private int views;
-    private String uploadDate;
 
-    public Video(int id, String title, String url, int views, String uploadDate) {
+    public Video(int id, String title, String url, int views) {
         this.id = id;
         this.title = title;
         this.url = url;
         this.views = views;
-        this.uploadDate = uploadDate;
     }
 
     public int getId() {
@@ -52,16 +50,8 @@ public class Video {
         this.views = views;
     }
 
-    public String getUploadDate() {
-        return uploadDate;
-    }
-
-    public void setUploadDate(String uploadDate) {
-        this.uploadDate = uploadDate;
-    }
-
     @Override
     public String toString() {
-        return title + "(Views: " + views + ")/(" + uploadDate + ")";
+        return title + " - (Views: " + views + ")";
     }
 }

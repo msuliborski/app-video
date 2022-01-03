@@ -16,6 +16,16 @@ import java.util.Random;
 
 public class VideoDAO {
 
+    private String getFilterString(Filter filter) {
+
+        StringBuilder filterStringBuilder = new StringBuilder();
+        if (filter.getTagToRemoveId() != 0) {
+            filterStringBuilder.append("id not in (select distinct videoId from tagsToVideos where tagId in (").append(filter.getTagToRemoveId()).append(")) and ");
+        }
+        filterStringBuilder.append(" views >= ").append(filter.getMinViews()).append(" AND ").append(" length(title) <= ").append(filter.getMaxTitleLength());
+        return filterStringBuilder.toString();
+    }
+
     public List<Video> getVideos(String title, List<Tag> tags, Filter filter) {
         try {
             StringBuilder tagsToInclude = new StringBuilder();
@@ -32,22 +42,12 @@ public class VideoDAO {
                 tagsToInclude.append(") AND ");
             }
 
-            StringBuilder tagsToExclude = new StringBuilder();
-            if (filter.getTagToRemoveId() != 0) {
-                tagsToExclude.append("id not in (select distinct videoId from tagsToVideos where tagId in (").append(filter.getTagToRemoveId()).append(")) and ");
-            }
-
-
             PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
                         "select * from videos WHERE " +
                                 "LOWER(title) LIKE ? AND " +
                                 tagsToInclude +
-                                tagsToExclude +
-                                " views >= ? AND " +
-                                " length(title) <= ?");
+                                getFilterString(filter));
             ps.setString(1, "%" + title.toLowerCase() + "%");
-            ps.setInt(2, filter.getMinViews());
-            ps.setInt(3, filter.getMaxTitleLength());
             ResultSet resultSet = ps.executeQuery();
             return handleVideosResult(resultSet);
         } catch (Exception ex) {
@@ -69,10 +69,11 @@ public class VideoDAO {
         }
     }
 
-    public List<Video> getRecentVideos() {
+    public List<Video> getRecentVideos(int userId, Filter filter) {
         try {
             PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
-                    "select * from videos ORDER BY uploadDate DESC LIMIT 10");
+                    "select videos.* from history join videos on videos.id = history.videoId WHERE userId=? and " + getFilterString(filter) + " ORDER BY history.id DESC LIMIT 5");
+            ps.setInt(1, userId);
             ResultSet resultSet = ps.executeQuery();
             return handleVideosResult(resultSet);
         } catch (Exception ex) {
@@ -81,10 +82,27 @@ public class VideoDAO {
         }
     }
 
-    public List<Video> getMostPopularVideos() {
+
+
+    public List<Video> getMostPopularVideos(Filter filter) {
         try {
             PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
-                    "select * from videos ORDER BY views DESC LIMIT 10");
+                    "select * from videos WHERE " + getFilterString(filter) + " ORDER BY views DESC LIMIT 10");
+            System.out.println(ps.toString());
+            ResultSet resultSet = ps.executeQuery();
+            return handleVideosResult(resultSet);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return null;
+        }
+    }
+
+    public List<Video> getVideosFromPlaylist(int playlistId, Filter filter) {
+        try {
+            PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
+                    "select * from videos where id in (select videoId from videosToPlaylists where playlistId = ?) and " + getFilterString(filter));
+            ps.setInt(1, playlistId);
+            System.out.println(ps.toString());
             ResultSet resultSet = ps.executeQuery();
             return handleVideosResult(resultSet);
         } catch (Exception ex) {
@@ -97,7 +115,7 @@ public class VideoDAO {
         List<Video> videos = new ArrayList<>();
         while(resultSet.next()) {
             videos.add(new Video(resultSet.getInt("id"), resultSet.getString("title"),
-                    resultSet.getString("url"), resultSet.getInt("views"), resultSet.getString("uploadDate")));
+                    resultSet.getString("url"), resultSet.getInt("views")));
         }
         return videos;
     }
@@ -112,6 +130,19 @@ public class VideoDAO {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             return false;
+        }
+    }
+
+
+    public void addVideoToUserHistory(int videoId, int userId) {
+        try {
+            PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
+                    "INSERT INTO history (videoId, userId) VALUES (?, ?)");
+            ps.setInt(1, videoId);
+            ps.setInt(2, userId);
+            ps.execute();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
     }
 

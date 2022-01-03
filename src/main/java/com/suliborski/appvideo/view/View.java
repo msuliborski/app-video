@@ -16,6 +16,7 @@ public class View extends JFrame {
     private JButton registerAuthButton;
     private JButton logoutAuthButton;
     private JButton premiumAuthButton;
+    private JComboBox filterAuthComboBox;
 
     private JPanel menuPanel;
     private JButton exploreMenuButton;
@@ -39,34 +40,27 @@ public class View extends JFrame {
     private JTextField registerPanelBirthdayField;
     private JButton registerPanelRegisterButton;
 
-    private JPanel explorePanel;
-    private JTextField explorePanelSearchField;
-    private JButton explorePanelSearchButton;
-    private JButton explorePanelClearButton;
-    private JPanel explorePanelVideosResultPanel;
-    private JList explorePanelVideosResultList;
-    private JList explorePanelAllTagsList;
-    private JList explorePanelChosenTagsList;
-
-
-    private JPanel videoListPanel;
-    private JList videoListPanelVideosList;
-    private JComboBox videoListPanelPlaylistComboBox;
-    private JLabel videoListPanelLabel;
-
-    private JPanel playlistPanel;
-    private JComboBox playlistPanelPlaylistsComboBox;
-    private JList playlistPanelPlaylistsList;
-    private JTextField playlistPanelAddPlaylistField;
-    private JButton playlistPanelAddPlaylistButton;
-    private JTextField playlistPanelSearchField;
-    private JButton playlistPanelSearchButton;
-    private JButton playlistPanelClearButton;
-    private JList playlistPanelVideosResultList;
+    private JPanel searchPanel;
+    private JPanel searchPanelPlaylistPanel;
+    private JComboBox searchPanelPlaylistsComboBox;
+    private JList searchPanelPlaylistVideosList;
+    private JButton searchPanelPrintPlaylistButton;
+    private JTextField searchPanelAddPlaylistField;
+    private JButton searchPanelAddPlaylistButton;
+    private JPanel searchPanelSearchPanel;
+    private JLabel searchPanelVideosLabel;
+    private JTextField searchPanelSearchField;
+    private JButton searchPanelSearchButton;
+    private JButton searchPanelClearButton;
+    private JPanel searchPanelTagsPanel;
+    private JList searchPanelVideosResultList;
+    private JList searchPanelAllTagsList;
+    private JList searchPanelChosenTagsList;
 
 
     private JPanel videoPlayerPanel;
     private JLabel videoPlayerPanelTitleLabel;
+    private JLabel videoPlayerVideoImageLabel;
     private JLabel videoPlayerPanelViewsLabel;
     private JButton videoPlayerPanelPlayButton;
     private JList videoPlayerPanelTagsList;
@@ -77,10 +71,17 @@ public class View extends JFrame {
     public View() {
         setName("AppVideo");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
+        setSize(1200, 800);
         setContentPane(rootPanel);
         setVisible(true);
 
+        premiumAuthButton.setVisible(false);
+        filterAuthComboBox.setVisible(false);
+        mostPopularMenuButton.setVisible(false);
+        registerPanel.setVisible(false);
+        searchPanel.setVisible(false);
+        videoPlayerPanel.setVisible(false);
+        logoutAuthButton.setVisible(false);
     }
 
     public void displayErrorMessage(String message) {
@@ -97,6 +98,14 @@ public class View extends JFrame {
 
     public JPanel getAuthPanel() {
         return authPanel;
+    }
+
+    public JLabel getLogoLabel() {
+        return logoLabel;
+    }
+
+    public JLabel getGreetingLabel() {
+        return greetingLabel;
     }
 
     public JButton getLoginAuthButton() {
@@ -123,12 +132,16 @@ public class View extends JFrame {
         return exploreMenuButton;
     }
 
-    public JButton getMyPlaylistsMenuButton() {
-        return myPlaylistsMenuButton;
-    }
-
     public JButton getRecentMenuButton() {
         return recentMenuButton;
+    }
+
+    public JButton getMostPopularMenuButton() {
+        return mostPopularMenuButton;
+    }
+
+    public JButton getMyPlaylistsMenuButton() {
+        return myPlaylistsMenuButton;
     }
 
     public JButton getNewPlaylistMenuButton() {
@@ -147,30 +160,6 @@ public class View extends JFrame {
         return loginPanelPasswordField;
     }
 
-    public JTextField getExplorePanelSearchField() {
-        return explorePanelSearchField;
-    }
-
-    public JButton getExplorePanelSearchButton() {
-        return explorePanelSearchButton;
-    }
-
-    public JButton getExplorePanelClearButton() {
-        return explorePanelClearButton;
-    }
-
-    public JList getExplorePanelAllTagsList() {
-        return explorePanelAllTagsList;
-    }
-
-    public JList getExplorePanelChosenTagsList() {
-        return explorePanelChosenTagsList;
-    }
-
-    public JLabel getLogoLabel() {
-        return logoLabel;
-    }
-
     public JButton getLoginPanelLoginButton() {
         return loginPanelLoginButton;
     }
@@ -183,12 +172,12 @@ public class View extends JFrame {
         return registerPanelNameField;
     }
 
-    public JTextField getRegisterPanelSurnameField() {
-        return registerPanelSurnameField;
+    public JTextField getRegisterPanelEmailField() {
+        return registerPanelEmailField;
     }
 
-    public JButton getMostPopularMenuButton() {
-        return mostPopularMenuButton;
+    public JTextField getRegisterPanelSurnameField() {
+        return registerPanelSurnameField;
     }
 
     public JTextField getRegisterPanelUsernameField() {
@@ -211,49 +200,66 @@ public class View extends JFrame {
         return registerPanelRegisterButton;
     }
 
-    public JPanel getExplorePanel() {
-        return explorePanel;
+    public JPanel getSearchPanel() {
+        return searchPanel;
     }
 
-    public JList getList1() {
-        return explorePanelAllTagsList;
+    public JPanel getSearchPanelPlaylistPanel() {
+        return searchPanelPlaylistPanel;
     }
 
-    public JList getList2() {
-        return explorePanelChosenTagsList;
+    public JComboBox getSearchPanelPlaylistsComboBox() {
+        return searchPanelPlaylistsComboBox;
     }
 
-    public JButton getButton6() {
-        return explorePanelSearchButton;
+    public JList getSearchPanelPlaylistVideosList() {
+        return searchPanelPlaylistVideosList;
     }
 
-    public JPanel getRecentPanel() {
-        return videoListPanel;
+    public JTextField getSearchPanelAddPlaylistField() {
+        return searchPanelAddPlaylistField;
     }
 
-    public JPanel getMyPlaylistsPanel() {
-        return playlistPanel;
+    public JButton getSearchPanelAddPlaylistButton() {
+        return searchPanelAddPlaylistButton;
     }
 
-    public JTextField getRegisterPanelEmailField() {
-        return registerPanelEmailField;
+    public JPanel getSearchPanelSearchPanel() {
+        return searchPanelSearchPanel;
     }
 
-    public JLabel getGreetingLabel() {
-        return greetingLabel;
+    public JTextField getSearchPanelSearchField() {
+        return searchPanelSearchField;
     }
 
-    public JPanel getExplorePanelVideosResultPanel() {
-        return explorePanelVideosResultPanel;
+    public JButton getSearchPanelSearchButton() {
+        return searchPanelSearchButton;
     }
 
-    public JList getExplorePanelVideosResultList() {
-        return explorePanelVideosResultList;
+    public JButton getSearchPanelClearButton() {
+        return searchPanelClearButton;
+    }
+
+    public JPanel getSearchPanelTagsPanel() {
+        return searchPanelTagsPanel;
+    }
+
+    public JList getSearchPanelVideosResultList() {
+        return searchPanelVideosResultList;
+    }
+
+    public JList getSearchPanelAllTagsList() {
+        return searchPanelAllTagsList;
+    }
+
+    public JList getSearchPanelChosenTagsList() {
+        return searchPanelChosenTagsList;
     }
 
     public JPanel getVideoPlayerPanel() {
         return videoPlayerPanel;
     }
+
     public JLabel getVideoPlayerPanelTitleLabel() {
         return videoPlayerPanelTitleLabel;
     }
@@ -278,55 +284,19 @@ public class View extends JFrame {
         return videoPlayerPanelAddTagButton;
     }
 
-    public JPanel getVideoListPanel() {
-        return videoListPanel;
+    public JLabel getSearchPanelVideosLabel() {
+        return searchPanelVideosLabel;
     }
 
-    public JList getVideoListPanelVideosList() {
-        return videoListPanelVideosList;
+    public JComboBox getFilterAuthComboBox() {
+        return filterAuthComboBox;
     }
 
-    public JComboBox getVideoListPanelPlaylistComboBox() {
-        return videoListPanelPlaylistComboBox;
+    public JButton getSearchPanelPrintPlaylistButton() {
+        return searchPanelPrintPlaylistButton;
     }
 
-    public JLabel getVideoListPanelLabel() {
-        return videoListPanelLabel;
-    }
-
-    public JPanel getPlaylistPanel() {
-        return playlistPanel;
-    }
-
-    public JComboBox getPlaylistPanelPlaylistsComboBox() {
-        return playlistPanelPlaylistsComboBox;
-    }
-
-    public JList getPlaylistPanelPlaylistsList() {
-        return playlistPanelPlaylistsList;
-    }
-
-    public JTextField getPlaylistPanelAddPlaylistField() {
-        return playlistPanelAddPlaylistField;
-    }
-
-    public JButton getPlaylistPanelAddPlaylistButton() {
-        return playlistPanelAddPlaylistButton;
-    }
-
-    public JTextField getPlaylistPanelSearchField() {
-        return playlistPanelSearchField;
-    }
-
-    public JButton getPlaylistPanelSearchButton() {
-        return playlistPanelSearchButton;
-    }
-
-    public JButton getPlaylistPanelClearButton() {
-        return playlistPanelClearButton;
-    }
-
-    public JList getPlaylistPanelVideosResultList() {
-        return playlistPanelVideosResultList;
+    public JLabel getVideoPlayerVideoImageLabel() {
+        return videoPlayerVideoImageLabel;
     }
 }

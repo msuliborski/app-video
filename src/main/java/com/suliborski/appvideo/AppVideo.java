@@ -1,10 +1,7 @@
 package com.suliborski.appvideo;
 
 import com.suliborski.appvideo.controller.*;
-import com.suliborski.appvideo.model.dao.FilterDAO;
-import com.suliborski.appvideo.model.dao.TagDAO;
-import com.suliborski.appvideo.model.dao.UserDAO;
-import com.suliborski.appvideo.model.dao.VideoDAO;
+import com.suliborski.appvideo.model.dao.*;
 import com.suliborski.appvideo.view.View;
 
 public class AppVideo {
@@ -16,12 +13,12 @@ public class AppVideo {
         VideoDAO videoModel = new VideoDAO();
         TagDAO tagModel = new TagDAO();
         FilterDAO filterModel = new FilterDAO();
+        PlaylistDAO playlistModel = new PlaylistDAO();
 
         VideoPlayerController videoPlayerController = new VideoPlayerController(view, videoModel, tagModel);
-        VideoListController videoListController = new VideoListController(view, videoModel, tagModel, filterModel, videoPlayerController);
-        NavigationController navigationController = new NavigationController(view, videoListController);
-        UserController userController = new UserController(view, userModel);
-        ExploreController exploreController = new ExploreController(view, videoModel, tagModel, filterModel, videoPlayerController);
+        SearchController searchController = new SearchController(view, videoModel, tagModel, filterModel, playlistModel, videoPlayerController);
+        NavigationController navigationController = new NavigationController(view, searchController);
+        UserController userController = new UserController(view, userModel, filterModel);
 
         view.setVisible(true);
     }

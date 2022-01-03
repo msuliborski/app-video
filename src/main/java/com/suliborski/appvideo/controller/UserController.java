@@ -1,45 +1,56 @@
 package com.suliborski.appvideo.controller;
 
+import com.suliborski.appvideo.model.dao.FilterDAO;
 import com.suliborski.appvideo.model.dao.UserDAO;
 import com.suliborski.appvideo.model.models.Filter;
+import com.suliborski.appvideo.model.models.Playlist;
 import com.suliborski.appvideo.model.models.User;
 import com.suliborski.appvideo.view.View;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class UserController {
 
     public static User loggedUser = null;
+    public static Filter activeFilter;
 
     private final View view;
     private final UserDAO userModel;
+    private final FilterDAO filterModel;
 
-    private List<Filter> activeFilters = new ArrayList<>();
+    private List<Filter> filters;
 
-    public UserController(View view, UserDAO userModel) {
+    public UserController(View view, UserDAO userModel, FilterDAO filterModel) {
         this.view = view;
         this.userModel = userModel;
+        this.filterModel = filterModel;
 
-        this.view.getLoginPanelLoginButton().addActionListener(e -> onLogin());
-        this.view.getRegisterPanelRegisterButton().addActionListener(e -> onRegister());
+        filters = filterModel.getAllFilters();
+
         this.view.getLogoutAuthButton().addActionListener(e -> onLogout());
         this.view.getPremiumAuthButton().addActionListener(e -> onPremium());
+        view.getFilterAuthComboBox().addActionListener(e -> {
+            filterModel.setUserFilter(loggedUser.getId(), filters.get(view.getFilterAuthComboBox().getSelectedIndex()).getId());
+            activeFilter = filterModel.getUserFilter(loggedUser.getId());
+            updateInterface();
+        });
+        view.getFilterAuthComboBox().setModel(new DefaultComboBoxModel(new Vector(filters)));
+        this.view.getLoginPanelLoginButton().addActionListener(e -> onLogin());
+        this.view.getRegisterPanelRegisterButton().addActionListener(e -> onRegister());
 
-        // @@@
-        loggedUser = userModel.verifyLogin("user", "user");
-        updateGreetingLabel();
-        updatePremiumButton();
-        NavigationController.showPanel(view.getRecentPanel());
     }
 
     private void onLogin() {
         loggedUser = userModel.verifyLogin(view.getLoginPanelLoginField().getText(), view.getLoginPanelPasswordField().getText());
         if (loggedUser != null) {
-            updateGreetingLabel();
-            updatePremiumButton();
             view.displayInformationMessage("You've been logged in successfully!");
-            NavigationController.showPanel(view.getRecentPanel());
+            view.getLoginPanelLoginField().setText("");
+            view.getLoginPanelPasswordField().setText("");
+            updateInterface();
+            NavigationController.showRecentPanel();
         } else {
             view.displayErrorMessage("Wrong username or password!");
         }
@@ -72,41 +83,64 @@ public class UserController {
                 view.getRegisterPanelEmailField().getText(), view.getRegisterPanelUsernameField().getText(),
                 view.getRegisterPanelPasswordField().getText(), view.getRegisterPanelBirthdayField().getText());
         view.displayInformationMessage("You've been registered successfully and automatically logged in!");
-        updateGreetingLabel();
-        updatePremiumButton();
-        NavigationController.showPanel(view.getRecentPanel());
+        view.getRegisterPanelNameField().setText("");
+        view.getRegisterPanelSurnameField().setText("");
+        view.getRegisterPanelEmailField().setText("");
+        view.getRegisterPanelUsernameField().setText("");
+        view.getRegisterPanelPasswordField().setText("");
+        view.getRegisterPanelRepeatPasswordField().setText("");
+        view.getRegisterPanelBirthdayField().setText("");
+        updateInterface();
+        NavigationController.showRecentPanel();
     }
 
     private void onLogout() {
         loggedUser = null;
-        updateGreetingLabel();
-        NavigationController.showPanel(view.getLoginPanel());
+        updateInterface();
+        NavigationController.showLoginPanel();
     }
 
     private void onPremium() {
         if (loggedUser != null) {
             userModel.setUserPremium(loggedUser.getId(), !loggedUser.isPremium());
-            updateLoggedUser();
-            updatePremiumButton();
+            updateInterface();
         }
-        //remove filters
     }
 
-    private void updateLoggedUser() {
-        loggedUser = userModel.getUserById(loggedUser.getId());
-    }
 
-    private void updatePremiumButton() {
+    private void updateInterface() {
+        loggedUser = loggedUser != null ? userModel.getUserById(loggedUser.getId()) : null;
         if (loggedUser != null) {
-            if (loggedUser.isPremium()) view.getPremiumAuthButton().setText("Cancel Premium");
-            else view.getPremiumAuthButton().setText("Become Premium");
+            activeFilter = filterModel.getUserFilter(loggedUser.getId());
+            if(filters.size() >= 1) view.getFilterAuthComboBox().setSelectedIndex(loggedUser.getFilterId()-1);
+            view.getGreetingLabel().setText("Hello, " + loggedUser.getName() + " " + loggedUser.getSurname() + "!");
+            view.getLogoutAuthButton().setVisible(true);
+            view.getLoginAuthButton().setVisible(false);
+            view.getRegisterAuthButton().setVisible(false);
+            view.getPremiumAuthButton().setVisible(true);
+            if (loggedUser.isPremium()) {
+                view.getPremiumAuthButton().setText("Cancel Premium");
+                view.getFilterAuthComboBox().setVisible(true);
+                view.getSearchPanelPrintPlaylistButton().setVisible(true);
+                view.getMostPopularMenuButton().setVisible(true);
+                if(filters.size() >= 1) view.getFilterAuthComboBox().setSelectedIndex(loggedUser.getFilterId()-1);
+            }
+            else {
+                view.getPremiumAuthButton().setText("Become Premium");
+                view.getFilterAuthComboBox().setVisible(false);
+                view.getSearchPanelPrintPlaylistButton().setVisible(false);
+                view.getMostPopularMenuButton().setVisible(false);
+                filterModel.setUserFilter(loggedUser.getId(), 1);
+            }
+        } else {
+            view.getGreetingLabel().setText("Log in to use the app!");
+            view.getLogoutAuthButton().setVisible(false);
+            view.getFilterAuthComboBox().setVisible(false);
+            view.getLoginAuthButton().setVisible(true);
+            view.getRegisterAuthButton().setVisible(true);
+            view.getPremiumAuthButton().setVisible(false);
+            view.getMostPopularMenuButton().setVisible(false);
         }
     }
-
-    private void updateGreetingLabel() {
-        if (loggedUser != null) view.getGreetingLabel().setText("Hello, " + loggedUser.getName() + " " + loggedUser.getSurname() + "!");
-        else view.getGreetingLabel().setText("Log in to use the app!");
-    }
-
 
 }
