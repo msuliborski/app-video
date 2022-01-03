@@ -1,26 +1,25 @@
 package com.suliborski.appvideo.controller;
 
-import com.suliborski.appvideo.viev.View;
+import com.suliborski.appvideo.view.View;
 
 import javax.swing.*;
 
 public class NavigationController {
 
     private static View view;
+    private VideoListController videoListController;
 
-    public NavigationController(View view) {
+    public NavigationController(View view, VideoListController videoListController) {
         NavigationController.view = view;
+        this.videoListController = videoListController;
 
-        // @@@
-//        showPanel(view.getLoginPanel());
-        showPanel(view.getExplorePanel());
-
-        NavigationController.view.getRegisterAuthButton().addActionListener(e -> {showPanel(view.getRegisterPanel());});
-        NavigationController.view.getLoginAuthButton().addActionListener(e -> {showPanel(view.getLoginPanel());});
-        NavigationController.view.getExploreMenuButton().addActionListener(e -> {showPanel(view.getExplorePanel());});
-        NavigationController.view.getMyPlaylistsMenuButton().addActionListener(e -> {showPanel(view.getMyPlaylistsPanel());});
-        NavigationController.view.getRecentMenuButton().addActionListener(e -> {showPanel(view.getRecentPanel());});
-        NavigationController.view.getNewPlaylistMenuButton().addActionListener(e -> {showPanel(view.getNewPlaylistPanel());});
+        view.getRegisterAuthButton().addActionListener(e -> {showPanel(view.getRegisterPanel());});
+        view.getLoginAuthButton().addActionListener(e -> {showPanel(view.getLoginPanel());});
+        view.getExploreMenuButton().addActionListener(e -> {showPanel(view.getExplorePanel());});
+        view.getRecentMenuButton().addActionListener(e -> {showPanel(view.getVideoListPanel()); videoListController.setRecentVideosMode();});
+        view.getMostPopularMenuButton().addActionListener(e -> {showPanel(view.getVideoListPanel()); videoListController.setMostPopularVideosMode();});
+        view.getMyPlaylistsMenuButton().addActionListener(e -> {showPanel(view.getVideoListPanel()); videoListController.setMyPlaylistsMode();});
+        view.getNewPlaylistMenuButton().addActionListener(e -> {showPanel(view.getPlaylistPanel());});
     }
 
     public static void showPanel(JPanel panel) {
@@ -36,8 +35,8 @@ public class NavigationController {
         view.getRegisterPanel().setVisible(false);
         view.getLoginPanel().setVisible(false);
         view.getExplorePanel().setVisible(false);
-        view.getMyPlaylistsPanel().setVisible(false);
-        view.getRecentPanel().setVisible(false);
-        view.getNewPlaylistPanel().setVisible(false);
+        view.getVideoListPanel().setVisible(false);
+        view.getPlaylistPanel().setVisible(false);
+        view.getVideoPlayerPanel().setVisible(false);
     }
 }

@@ -3,7 +3,7 @@ package com.suliborski.appvideo.controller;
 import com.suliborski.appvideo.model.dao.UserDAO;
 import com.suliborski.appvideo.model.models.Filter;
 import com.suliborski.appvideo.model.models.User;
-import com.suliborski.appvideo.viev.View;
+import com.suliborski.appvideo.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,7 @@ public class UserController {
         loggedUser = userModel.verifyLogin("user", "user");
         updateGreetingLabel();
         updatePremiumButton();
+        NavigationController.showPanel(view.getRecentPanel());
     }
 
     private void onLogin() {

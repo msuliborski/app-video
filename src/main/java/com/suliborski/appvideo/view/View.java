@@ -1,6 +1,4 @@
-package com.suliborski.appvideo.viev;
-
-import tds.video.VideoWeb;
+package com.suliborski.appvideo.view;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,6 +10,7 @@ public class View extends JFrame {
     private JPanel rootPanel;
 
     private JPanel authPanel;
+    private JLabel logoLabel;
     private JLabel greetingLabel;
     private JButton loginAuthButton;
     private JButton registerAuthButton;
@@ -20,8 +19,9 @@ public class View extends JFrame {
 
     private JPanel menuPanel;
     private JButton exploreMenuButton;
-    private JButton myPlaylistsMenuButton;
     private JButton recentMenuButton;
+    private JButton mostPopularMenuButton;
+    private JButton myPlaylistsMenuButton;
     private JButton newPlaylistMenuButton;
 
     private JPanel loginPanel;
@@ -45,16 +45,33 @@ public class View extends JFrame {
     private JButton explorePanelClearButton;
     private JPanel explorePanelVideosResultPanel;
     private JList explorePanelVideosResultList;
-
-
-
     private JList explorePanelAllTagsList;
     private JList explorePanelChosenTagsList;
 
-    private JPanel recentPanel;
-    private JPanel myPlaylistsPanel;
-    private JPanel newPlaylistPanel;
-    private JLabel logoLabel;
+
+    private JPanel videoListPanel;
+    private JList videoListPanelVideosList;
+    private JComboBox videoListPanelPlaylistComboBox;
+    private JLabel videoListPanelLabel;
+
+    private JPanel playlistPanel;
+    private JComboBox playlistPanelPlaylistsComboBox;
+    private JList playlistPanelPlaylistsList;
+    private JTextField playlistPanelAddPlaylistField;
+    private JButton playlistPanelAddPlaylistButton;
+    private JTextField playlistPanelSearchField;
+    private JButton playlistPanelSearchButton;
+    private JButton playlistPanelClearButton;
+    private JList playlistPanelVideosResultList;
+
+
+    private JPanel videoPlayerPanel;
+    private JLabel videoPlayerPanelTitleLabel;
+    private JLabel videoPlayerPanelViewsLabel;
+    private JButton videoPlayerPanelPlayButton;
+    private JList videoPlayerPanelTagsList;
+    private JTextField videoPlayerPanelAddTagField;
+    private JButton videoPlayerPanelAddTagButton;
 
 
     public View() {
@@ -63,13 +80,7 @@ public class View extends JFrame {
         setSize(800, 600);
         setContentPane(rootPanel);
         setVisible(true);
-////
-//        VideoWeb videoWeb = new VideoWeb();
-////        JCalendar calendar = new JCalendar();
-////        explorePanelVideosResultPanel.add(videoWeb);
-//////        videoWeb.playVideo("https://www.youtube.com/watch?v=xbev7gEdnNA");
-////        //jcalendar
-////        //video playback
+
     }
 
     public void displayErrorMessage(String message) {
@@ -78,19 +89,6 @@ public class View extends JFrame {
 
     public void displayInformationMessage(String message) {
         JOptionPane.showMessageDialog(this, message, "Information", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    public void playVideo(int videoId) {
-//        EventQueue.invokeLater(() -> {
-//            try {
-//                videoWeb = new VideoWeb();
-//                PruebaVideoUI frame = new PruebaVideoUI();
-//                frame.setVisible(true);
-//                videoWeb.playVideo("https://www.youtube.com/watch?v=1VDaOPzQ1sk ");
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        });
     }
 
     public JPanel getRootPanel() {
@@ -189,6 +187,10 @@ public class View extends JFrame {
         return registerPanelSurnameField;
     }
 
+    public JButton getMostPopularMenuButton() {
+        return mostPopularMenuButton;
+    }
+
     public JTextField getRegisterPanelUsernameField() {
         return registerPanelUsernameField;
     }
@@ -226,15 +228,11 @@ public class View extends JFrame {
     }
 
     public JPanel getRecentPanel() {
-        return recentPanel;
+        return videoListPanel;
     }
 
     public JPanel getMyPlaylistsPanel() {
-        return myPlaylistsPanel;
-    }
-
-    public JPanel getNewPlaylistPanel() {
-        return newPlaylistPanel;
+        return playlistPanel;
     }
 
     public JTextField getRegisterPanelEmailField() {
@@ -251,5 +249,84 @@ public class View extends JFrame {
 
     public JList getExplorePanelVideosResultList() {
         return explorePanelVideosResultList;
+    }
+
+    public JPanel getVideoPlayerPanel() {
+        return videoPlayerPanel;
+    }
+    public JLabel getVideoPlayerPanelTitleLabel() {
+        return videoPlayerPanelTitleLabel;
+    }
+
+    public JLabel getVideoPlayerPanelViewsLabel() {
+        return videoPlayerPanelViewsLabel;
+    }
+
+    public JButton getVideoPlayerPanelPlayButton() {
+        return videoPlayerPanelPlayButton;
+    }
+
+    public JList getVideoPlayerPanelTagsList() {
+        return videoPlayerPanelTagsList;
+    }
+
+    public JTextField getVideoPlayerPanelAddTagField() {
+        return videoPlayerPanelAddTagField;
+    }
+
+    public JButton getVideoPlayerPanelAddTagButton() {
+        return videoPlayerPanelAddTagButton;
+    }
+
+    public JPanel getVideoListPanel() {
+        return videoListPanel;
+    }
+
+    public JList getVideoListPanelVideosList() {
+        return videoListPanelVideosList;
+    }
+
+    public JComboBox getVideoListPanelPlaylistComboBox() {
+        return videoListPanelPlaylistComboBox;
+    }
+
+    public JLabel getVideoListPanelLabel() {
+        return videoListPanelLabel;
+    }
+
+    public JPanel getPlaylistPanel() {
+        return playlistPanel;
+    }
+
+    public JComboBox getPlaylistPanelPlaylistsComboBox() {
+        return playlistPanelPlaylistsComboBox;
+    }
+
+    public JList getPlaylistPanelPlaylistsList() {
+        return playlistPanelPlaylistsList;
+    }
+
+    public JTextField getPlaylistPanelAddPlaylistField() {
+        return playlistPanelAddPlaylistField;
+    }
+
+    public JButton getPlaylistPanelAddPlaylistButton() {
+        return playlistPanelAddPlaylistButton;
+    }
+
+    public JTextField getPlaylistPanelSearchField() {
+        return playlistPanelSearchField;
+    }
+
+    public JButton getPlaylistPanelSearchButton() {
+        return playlistPanelSearchButton;
+    }
+
+    public JButton getPlaylistPanelClearButton() {
+        return playlistPanelClearButton;
+    }
+
+    public JList getPlaylistPanelVideosResultList() {
+        return playlistPanelVideosResultList;
     }
 }

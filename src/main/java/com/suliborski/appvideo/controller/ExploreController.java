@@ -2,12 +2,10 @@ package com.suliborski.appvideo.controller;
 
 import com.suliborski.appvideo.model.dao.FilterDAO;
 import com.suliborski.appvideo.model.dao.TagDAO;
-import com.suliborski.appvideo.model.dao.UserDAO;
 import com.suliborski.appvideo.model.dao.VideoDAO;
 import com.suliborski.appvideo.model.models.Tag;
-import com.suliborski.appvideo.model.models.User;
 import com.suliborski.appvideo.model.models.Video;
-import com.suliborski.appvideo.viev.View;
+import com.suliborski.appvideo.view.View;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -21,16 +19,18 @@ public class ExploreController {
     private final VideoDAO videoModel;
     private final TagDAO tagModel;
     private final FilterDAO filterModel;
+    private final VideoPlayerController videoPlayerController;
 
     private List<Tag> availableTags;
     private List<Tag> chosenTags;
     private List<Video> foundVideos;
 
-    public ExploreController(View view, VideoDAO videoModel, TagDAO tagModel, FilterDAO filterModel) {
+    public ExploreController(View view, VideoDAO videoModel, TagDAO tagModel, FilterDAO filterModel, VideoPlayerController videoPlayerController) {
         this.view = view;
         this.videoModel = videoModel;
         this.tagModel = tagModel;
         this.filterModel = filterModel;
+        this.videoPlayerController = videoPlayerController;
 
         availableTags = tagModel.getAllTags();
         chosenTags = new ArrayList<>();
@@ -39,6 +39,7 @@ public class ExploreController {
 
         addDoubleClickOnAllTagsElement();
         addDoubleClickOnChosenTagsElement();
+        addDoubleClickOnResultVideoElement();
         this.view.getExplorePanelSearchButton().addActionListener(e -> onSearch());
         this.view.getExplorePanelClearButton().addActionListener(e -> onClear());
     }
@@ -77,6 +78,18 @@ public class ExploreController {
                     availableTags.add(chosenTags.get(index));
                     chosenTags.remove(index);
                     updateInterface();
+                }
+            }
+        });
+    }
+
+    private void addDoubleClickOnResultVideoElement() {
+        view.getExplorePanelVideosResultList().addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                if (evt.getClickCount() == 2) {
+                    int index = view.getExplorePanelVideosResultList().locationToIndex(evt.getPoint());
+                    videoPlayerController.playVideo(foundVideos.get(index));
+                    NavigationController.showPanel(view.getVideoPlayerPanel());
                 }
             }
         });

@@ -23,6 +23,75 @@ public class TagDAO {
             return null;
         }
     }
+
+    public List<Tag> getVideoTags(int videoId) {
+        try {
+            PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
+                    "select * from tags where id in (select tagId from tagsToVideos where videoId=?)");
+            ps.setInt(1, videoId);
+            ResultSet resultSet = ps.executeQuery();
+            return handleTagsResult(resultSet);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return null;
+        }
+    }
+    public void addTagToVideo(String name, int videoId) {
+        try {
+
+            // check if tag exists
+            PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
+                    "select * from tags where name=?");
+            ps.setString(1, name);
+            ResultSet resultSet = ps.executeQuery();
+            if(resultSet.next()) {
+                int tagId = resultSet.getInt("id");
+
+                // check if tag is already assigned to video
+                ps = MySQLHandler.getConnection().prepareStatement(
+                        "select * from tagsToVideos where tagId=? and videoId=?");
+                ps.setInt(1, tagId);
+                ps.setInt(2, videoId);
+                resultSet = ps.executeQuery();
+                if(!resultSet.next()) {
+                    // add tag to video
+                    ps = MySQLHandler.getConnection().prepareStatement(
+                            "INSERT INTO tagsToVideos (tagId, videoId) VALUES (?, ?)");
+                    ps.setInt(1, tagId);
+                    ps.setInt(2, videoId);
+                    ps.executeUpdate();
+                } else {
+                    System.out.println("Tag is already assigned to video");
+                }
+            } else {
+                // add tag to database
+                ps = MySQLHandler.getConnection().prepareStatement(
+                        "INSERT INTO tags (name) VALUES (?)");
+                ps.setString(1, name);
+                ps.executeUpdate();
+
+                // get tag id
+                ps = MySQLHandler.getConnection().prepareStatement(
+                        "select * from tags where name=?");
+                ps.setString(1, name);
+                resultSet = ps.executeQuery();
+                if (resultSet.next()) {
+                    int tagId = resultSet.getInt("id");
+
+                    // add tag to video
+                    ps = MySQLHandler.getConnection().prepareStatement(
+                            "INSERT INTO tagsToVideos (tagId, videoId) VALUES (?, ?)");
+                    ps.setInt(1, tagId);
+                    ps.setInt(2, videoId);
+                    ps.executeUpdate();
+                }
+
+            }
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
     public static boolean addTag(String name) {
         try {
             PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(

@@ -48,7 +48,43 @@ public class VideoDAO {
             ps.setString(1, "%" + title.toLowerCase() + "%");
             ps.setInt(2, filter.getMinViews());
             ps.setInt(3, filter.getMaxTitleLength());
-            System.out.println(ps.toString());
+            ResultSet resultSet = ps.executeQuery();
+            return handleVideosResult(resultSet);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return null;
+        }
+    }
+
+    public Video getVideoById(int id) {
+        try {
+            PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
+                    "select * from videos where id = ?");
+            ps.setInt(1, id);
+            ResultSet resultSet = ps.executeQuery();
+            return handleVideosResult(resultSet).get(0);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return null;
+        }
+    }
+
+    public List<Video> getRecentVideos() {
+        try {
+            PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
+                    "select * from videos ORDER BY uploadDate DESC LIMIT 10");
+            ResultSet resultSet = ps.executeQuery();
+            return handleVideosResult(resultSet);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return null;
+        }
+    }
+
+    public List<Video> getMostPopularVideos() {
+        try {
+            PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
+                    "select * from videos ORDER BY views DESC LIMIT 10");
             ResultSet resultSet = ps.executeQuery();
             return handleVideosResult(resultSet);
         } catch (Exception ex) {
@@ -61,19 +97,17 @@ public class VideoDAO {
         List<Video> videos = new ArrayList<>();
         while(resultSet.next()) {
             videos.add(new Video(resultSet.getInt("id"), resultSet.getString("title"),
-                    resultSet.getString("url"), resultSet.getInt("views")));
+                    resultSet.getString("url"), resultSet.getInt("views"), resultSet.getString("uploadDate")));
         }
         return videos;
     }
 
-    public static boolean addVideo(String title, String url) {
+    public boolean addViewToVideo(int videoId) {
         try {
             PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
-                    "INSERT INTO videos (title, url) VALUES (?, ?)");
-            ps.setString(1, title);
-            ps.setString(2, url);
+                    "UPDATE videos SET views = views + 1 WHERE id = ?");
+            ps.setInt(1, videoId);
             ps.execute();
-
             return true;
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
@@ -81,12 +115,12 @@ public class VideoDAO {
         }
     }
 
-    public static boolean addTagToVideo(int videoId, int tagId) {
+    public boolean addVideo(String title, String url) {
         try {
             PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
-                    "INSERT INTO tagsToVideos (title, url) VALUES (?, ?)");
-            ps.setInt(1, videoId);
-            ps.setInt(2, tagId);
+                    "INSERT INTO videos (title, url) VALUES (?, ?)");
+            ps.setString(1, title);
+            ps.setString(2, url);
             ps.execute();
 
             return true;

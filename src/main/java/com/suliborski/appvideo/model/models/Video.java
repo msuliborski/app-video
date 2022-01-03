@@ -6,12 +6,14 @@ public class Video {
     private String title;
     private String url;
     private int views;
+    private String uploadDate;
 
-    public Video(int id, String title, String url, int views) {
+    public Video(int id, String title, String url, int views, String uploadDate) {
         this.id = id;
         this.title = title;
         this.url = url;
         this.views = views;
+        this.uploadDate = uploadDate;
     }
 
     public int getId() {
@@ -33,6 +35,7 @@ public class Video {
     public String getUrl() {
         return url;
     }
+
     public String getFullUrl() {
         return "https://www.youtube.com/watch?v=" + url;
     }
@@ -49,9 +52,16 @@ public class Video {
         this.views = views;
     }
 
-    @Override
-    public String toString() {
-        return title;
+    public String getUploadDate() {
+        return uploadDate;
     }
 
+    public void setUploadDate(String uploadDate) {
+        this.uploadDate = uploadDate;
+    }
+
+    @Override
+    public String toString() {
+        return title + "(Views: " + views + ")/(" + uploadDate + ")";
+    }
 }
