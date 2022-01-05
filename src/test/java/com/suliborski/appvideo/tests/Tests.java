@@ -1,10 +1,7 @@
 package com.suliborski.appvideo.tests;
 
-import com.suliborski.appvideo.controller.Controller;
-import com.suliborski.appvideo.model.Model;
 import com.suliborski.appvideo.model.dao.*;
 import com.suliborski.appvideo.model.models.*;
-import com.suliborski.appvideo.view.View;
 
 import org.junit.jupiter.api.Test;
 

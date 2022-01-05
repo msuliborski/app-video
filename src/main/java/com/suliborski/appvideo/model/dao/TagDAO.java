@@ -1,7 +1,6 @@
 package com.suliborski.appvideo.model.dao;
 
 import com.suliborski.appvideo.model.models.Tag;
-import com.suliborski.appvideo.model.models.User;
 import com.suliborski.appvideo.model.utils.MySQLHandler;
 
 import java.sql.PreparedStatement;

@@ -1,7 +1,5 @@
 package com.suliborski.appvideo.model.models;
 
-import java.util.List;
-
 public class Filter {
 
     int id;

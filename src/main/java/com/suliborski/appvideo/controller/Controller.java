@@ -3,8 +3,8 @@ package com.suliborski.appvideo.controller;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.suliborski.appvideo.model.Model;
-import com.suliborski.appvideo.model.dao.*;
-import com.suliborski.appvideo.model.models.*;
+import com.suliborski.appvideo.model.models.Playlist;
+import com.suliborski.appvideo.model.models.Video;
 import com.suliborski.appvideo.view.View;
 
 import javax.imageio.ImageIO;
@@ -361,7 +361,7 @@ public class Controller {
         if (model.getPlaylists().size() >= 1) {
             try {
                 Document document = new Document();
-                PdfWriter.getInstance(document, new FileOutputStream(((Playlist)view.getSearchPanelPlaylistsComboBox().getSelectedItem()).getName() + " Playlist.pdf"));
+                PdfWriter.getInstance(document, new FileOutputStream(((Playlist)view.getSearchPanelPlaylistsComboBox().getSelectedItem()).getName() + " playlist.pdf"));
                 document.open();
                 document.add(new Paragraph("Playlist: " + ((Playlist)view.getSearchPanelPlaylistsComboBox().getSelectedItem()).getName()));
 

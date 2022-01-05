@@ -18,7 +18,7 @@ public class VideoDAO {
 
         StringBuilder filterStringBuilder = new StringBuilder();
         if (filter.getTagToRemoveId() != 0) {
-            filterStringBuilder.append("id not in (select distinct videoId from tagsToVideos where tagId in (").append(filter.getTagToRemoveId()).append(")) and ");
+            filterStringBuilder.append("videos.id not in (select distinct videoId from tagsToVideos where tagId in (").append(filter.getTagToRemoveId()).append(")) and ");
         }
         filterStringBuilder.append(" views >= ").append(filter.getMinViews()).append(" AND ").append(" length(title) <= ").append(filter.getMaxTitleLength());
         return filterStringBuilder.toString();

@@ -1,8 +1,7 @@
 package com.suliborski.appvideo;
 
-import com.suliborski.appvideo.controller.*;
+import com.suliborski.appvideo.controller.Controller;
 import com.suliborski.appvideo.model.Model;
-import com.suliborski.appvideo.model.dao.*;
 import com.suliborski.appvideo.view.View;
 
 public class AppVideo {
