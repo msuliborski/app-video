@@ -1,9 +1,7 @@
 package com.suliborski.appvideo.tests;
 
-import com.suliborski.appvideo.controller.NavigationController;
-import com.suliborski.appvideo.controller.SearchController;
-import com.suliborski.appvideo.controller.UserController;
-import com.suliborski.appvideo.controller.VideoPlayerController;
+import com.suliborski.appvideo.controller.Controller;
+import com.suliborski.appvideo.model.Model;
 import com.suliborski.appvideo.model.dao.*;
 import com.suliborski.appvideo.model.models.*;
 import com.suliborski.appvideo.view.View;
@@ -13,14 +11,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class Tests {
-    View view = new View();
-
     UserDAO userModel = new UserDAO();
     VideoDAO videoModel = new VideoDAO();
     TagDAO tagModel = new TagDAO();
     FilterDAO filterModel = new FilterDAO();
     PlaylistDAO playlistModel = new PlaylistDAO();
-
 
     @Test
     public void testUserManipulation() {

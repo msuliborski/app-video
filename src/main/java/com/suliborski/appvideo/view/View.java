@@ -82,6 +82,9 @@ public class View extends JFrame {
         searchPanel.setVisible(false);
         videoPlayerPanel.setVisible(false);
         logoutAuthButton.setVisible(false);
+
+        this.getRootPane().setDefaultButton(loginPanelLoginButton);
+        loginPanelLoginField.requestFocus();
     }
 
     public void displayErrorMessage(String message) {

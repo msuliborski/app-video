@@ -1,9 +1,7 @@
 package com.suliborski.appvideo.model.dao;
 
-import com.mysql.cj.util.StringUtils;
 import com.suliborski.appvideo.model.models.Filter;
 import com.suliborski.appvideo.model.models.Tag;
-import com.suliborski.appvideo.model.models.User;
 import com.suliborski.appvideo.model.models.Video;
 import com.suliborski.appvideo.model.utils.MySQLHandler;
 
@@ -26,11 +24,11 @@ public class VideoDAO {
         return filterStringBuilder.toString();
     }
 
-    public List<Video> getVideos(String title, List<Tag> tags, Filter filter) {
+    public List<Video> getVideosWithSearch(String title, List<Tag> tags, Filter filter) {
         try {
             StringBuilder tagsToInclude = new StringBuilder();
             if (tags.size() != 0) {
-                tagsToInclude.append("id in (SELECT DISTINCT videoId FROM tagsToVideos ");
+                tagsToInclude.append("videos.id in (SELECT DISTINCT videoId FROM tagsToVideos ");
                 for (Tag tag : tags) {
                     tagsToInclude.append("INNER JOIN (select videoId from tagsToVideos where tagId = ")
                             .append(tag.getId())
@@ -87,6 +85,7 @@ public class VideoDAO {
             PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
                     "select videos.* from history join videos on videos.id = history.videoId WHERE userId=? and " + getFilterString(filter) + " ORDER BY history.id DESC LIMIT 5");
             ps.setInt(1, userId);
+            System.out.println(ps.toString());
             ResultSet resultSet = ps.executeQuery();
             return handleVideosResult(resultSet);
         } catch (Exception ex) {

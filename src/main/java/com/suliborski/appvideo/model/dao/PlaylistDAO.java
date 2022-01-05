@@ -1,10 +1,6 @@
 package com.suliborski.appvideo.model.dao;
 
-import com.suliborski.appvideo.controller.VideoPlayerController;
-import com.suliborski.appvideo.model.models.Filter;
 import com.suliborski.appvideo.model.models.Playlist;
-import com.suliborski.appvideo.model.models.Tag;
-import com.suliborski.appvideo.model.models.Video;
 import com.suliborski.appvideo.model.utils.MySQLHandler;
 
 import java.sql.PreparedStatement;
