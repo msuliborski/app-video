@@ -83,7 +83,8 @@ public class VideoDAO {
     public List<Video> getRecentVideos(int userId, Filter filter) {
         try {
             PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
-                    "select videos.* from history join videos on videos.id = history.videoId WHERE userId=? and " + getFilterString(filter) + " ORDER BY history.id DESC LIMIT 5");
+                    "select videos.* from history join videos on videos.id = history.videoId WHERE userId=? and " +
+                            getFilterString(filter) + " ORDER BY history.id DESC LIMIT 5");
             ps.setInt(1, userId);
             System.out.println(ps.toString());
             ResultSet resultSet = ps.executeQuery();
@@ -99,7 +100,8 @@ public class VideoDAO {
     public List<Video> getMostPopularVideos(Filter filter) {
         try {
             PreparedStatement ps = MySQLHandler.getConnection().prepareStatement(
-                    "select * from videos WHERE " + getFilterString(filter) + " ORDER BY views DESC LIMIT 10");
+                    "select * from videos WHERE " +
+                            getFilterString(filter) + " ORDER BY views DESC LIMIT 10");
             System.out.println(ps.toString());
             ResultSet resultSet = ps.executeQuery();
             return handleVideosResult(resultSet);

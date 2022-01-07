@@ -94,8 +94,7 @@ public class FilterDAO {
         List<Filter> filters = new ArrayList<>();
         while(resultSet.next()) {
             filters.add(new Filter(resultSet.getInt("id"), resultSet.getString("name"),
-                    resultSet.getInt("tagToRemoveId"), resultSet.getInt("minViews"),
-                    resultSet.getInt("maxTitleLength")));
+                    resultSet.getInt("tagToRemoveId"), resultSet.getInt("minViews"), resultSet.getInt("maxTitleLength")));
         }
         return filters;
     }

@@ -29,8 +29,9 @@ public class Controller {
             if (model.getPlaylists().size() >= 1) {
                 if (evt.getClickCount() == 2) {
                     int index = view.getSearchPanelVideosResultList().locationToIndex(evt.getPoint());
-                    model.addVideoToPlaylist(model.getVideos().get(index).getId(), ((Playlist) view.getSearchPanelPlaylistsComboBox().getSelectedItem()).getId());
-                    model.updatePlaylistVideos(((Playlist) view.getSearchPanelPlaylistsComboBox().getSelectedItem()).getId());
+                    Playlist playlist = (Playlist) view.getSearchPanelPlaylistsComboBox().getSelectedItem();
+                    model.addVideoToPlaylist(model.getVideos().get(index).getId(), playlist.getId());
+                    model.updatePlaylistVideos(playlist.getId());
                     view.getSearchPanelPlaylistVideosList().setListData(new Vector<>(model.getPlaylistVideos()));
                 }
             } else {
